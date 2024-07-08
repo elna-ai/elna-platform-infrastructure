@@ -7,10 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 COPY scripts /bin
 
 # Update the image for keepinmg everything to latest
-RUN apt update -y
-RUN apt upgrade -y
-
-RUN apt install -y locales curl build-essential zsh
+RUN apt update && apt upgrade -y && apt install -y locales curl build-essential zsh
 
 RUN locale-gen en_US.UTF-8
 
@@ -19,14 +16,7 @@ ENV PATH="/scripts:$PATH"
 ENV PATH="/root/.cargo/bin:$PATH"
 ENV PATH="/root/.local/share/dfx/bin:$PATH"
 
-# Download rustup, install rust, ic-wasm and candid-extractor
-RUN install_tools.sh
-
-#install quill
-RUN install_quill.sh
-
-# Install dfx
-RUN install_dfx.sh
+RUN install_tools.sh && install_quill.sh && install_dfx.sh
 
 RUN mkdir /scripts
 

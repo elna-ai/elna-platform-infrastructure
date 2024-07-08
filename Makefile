@@ -4,22 +4,17 @@ DIR_NAME := $(shell basename $(shell pwd))
 PROJECT_VOLUME := ${PWD}:/${DIR_NAME}
 
 # Build the Docker image
-docker-build:
+build:
 	@docker buildx build -t ${IMAGE_NAME} .
 
-docker-clean-build:
+# Clean build the Docker image
+cbuild:
 	@docker buildx build --no-cache -t ${IMAGE_NAME} .
 
 # Run the Docker container
-docker-run:
+run:
 	@docker run -it -v ${PROJECT_VOLUME} -v ${PWD}/scripts:/scripts -w /${DIR_NAME} ${IMAGE_NAME}
-
-build:
-	@docker run -it -v ${PROJECT_VOLUME} -w /${DIR_NAME} ${IMAGE_NAME}
-
-test:
-	@docker run -it -v ${PROJECT_VOLUME} -w /${DIR_NAME} ${IMAGE_NAME} cargo test
 
 # Default target
 .PHONY: all
-all: build-container
+all: build
