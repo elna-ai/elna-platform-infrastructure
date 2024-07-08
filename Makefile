@@ -12,7 +12,7 @@ docker-clean-build:
 
 # Run the Docker container
 docker-run:
-	@docker run -it -v ${PROJECT_VOLUME} -w /${DIR_NAME} ${IMAGE_NAME}
+	@docker run -it -v ${PROJECT_VOLUME} -v ${PWD}/scripts:/scripts -w /${DIR_NAME} ${IMAGE_NAME}
 
 build:
 	@docker run -it -v ${PROJECT_VOLUME} -w /${DIR_NAME} ${IMAGE_NAME}
