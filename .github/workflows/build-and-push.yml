@@ -1,0 +1,34 @@
+name: build-and-push-docker-image
+
+on:
+    push:
+        branches: ['main', 'ELNA-161']
+
+env:
+    GITHUB_REGISTRY: ghcr.io
+    DOCKER_IMAGE: ${{ github.repository }}
+    DOCKER_BUILDKIT: 1
+    DOCKER_CLI_AGGREGATE: 1
+
+jobs:
+    build-push-docker-image:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+            packages: write
+        steps:
+            - name: checkout the repo
+              uses: actions/checkout@v4
+            - name: login to ghcr.io
+              run: docker login -u ${{ github.actor }} --password-stdin ${{ env.GITHUB_REGISTRY }}
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+            - name: build and push docker image using buildx
+              run: |
+                docker buildx create --use
+                docker buildx inspect
+                docker buildx build \
+                --platform linux/amd64 \
+                -t ${{ env.GITHUB_REGISTRY }}/${{ github.repository_owner }}/elna-platform-infrastructure:${{ github.sha }} \
+                -f Dockerfile \
+                --push .
