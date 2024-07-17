@@ -3,13 +3,14 @@ name: build-and-push-docker-image
 on:
   push:
     branches:
+      - main
       - release/*
     tags:
       - "v*.*.*"
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: sdk
 
 jobs:
   build-push-docker-image:
