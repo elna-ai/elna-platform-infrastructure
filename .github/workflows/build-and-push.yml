@@ -31,7 +31,7 @@ jobs:
                 docker buildx inspect
                 docker buildx build \
                 --platform linux/amd64 \
-                -t ${{ env.GITHUB_REGISTRY }}/${{ github.repository_owner }}/elna-platform-infrastructure:${{ github.sha }} \
+                -t ${{ env.GITHUB_REGISTRY }}/${{ github.repository_owner }}/elna-platform-infrastructure:${{ github.ref }} \
                 -f Dockerfile \
                 --push .
             - name: Release
