@@ -3,6 +3,8 @@ name: build-and-push-docker-image
 on:
     push:
         branches: ['main', 'ELNA-161']
+        tags:
+          - "v*.*.*"
 
 env:
     GITHUB_REGISTRY: ghcr.io
@@ -32,3 +34,12 @@ jobs:
                 -t ${{ env.GITHUB_REGISTRY }}/${{ github.repository_owner }}/elna-platform-infrastructure:${{ github.sha }} \
                 -f Dockerfile \
                 --push .
+            - name: Release
+              uses: actions/github-script@v7
+              with:
+                github-token: ${{ secrets.TOKEN }}
+                script: |
+                  await github.request(`POST /repos/elna-ai/elna-platform-infrastructure/releases`, {
+                    tag_name: "${{ github.ref }}",
+                    generate_release_note: true
+                  });
