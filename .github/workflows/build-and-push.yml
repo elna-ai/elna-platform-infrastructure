@@ -38,7 +38,7 @@ jobs:
               with:
                 github-token: ${{ secrets.TOKEN }}
                 script: |
-                  await github.request(`POST /repos/elna-ai/elna-platform-infrastructure/releases`, {
+                  await github.request(`POST /repos/elna-ai/${{ github.repository }}/releases`, {
                     tag_name: "${{ github.ref }}",
                     generate_release_note: true
                   });
