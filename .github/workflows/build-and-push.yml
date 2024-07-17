@@ -2,7 +2,6 @@ name: build-and-push-docker-image
 
 on:
     push:
-        branches: ['main', 'ELNA-161']
         tags:
           - "v*.*.*"
 
@@ -31,7 +30,7 @@ jobs:
                 docker buildx inspect
                 docker buildx build \
                 --platform linux/amd64 \
-                -t ${{ env.GITHUB_REGISTRY }}/${{ github.repository_owner }}/elna-platform-infrastructure:${{ github.sha }} \
+                -t ${{ env.GITHUB_REGISTRY }}/${{ github.repository_owner }}/elna-platform-infrastructure \
                 -f Dockerfile \
                 --push .
             - name: Release
