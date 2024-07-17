@@ -4,10 +4,10 @@ on:
   push:
     branches:
       - main
-      - release/*
     tags:
       - "v*.*.*"
-
+  pull_request:
+    branches: ["main"]
 env:
   REGISTRY: ghcr.io
   IMAGE_NAME: ${{ github.repository }}
@@ -40,7 +40,7 @@ jobs:
         uses: docker/build-push-action@v6.4.1
         with:
           context: .
-          push: true
+          push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
@@ -49,4 +49,4 @@ jobs:
         with:
           subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
           subject-digest: ${{ steps.push.outputs.digest }}
-          push-to-registry: true
+          push-to-registry: ${{ github.event_name != 'pull_request' }}
